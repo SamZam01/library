@@ -1,0 +1,110 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 2em;
+  background-color: #1a1a1a;
+  color: white;
+  border-bottom: 1px solid #333;
+  flex-wrap: wrap;
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+}
+
+.app-logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.main-nav a {
+  color: #ccc;
+  text-decoration: none;
+  margin-right: 1em;
+  transition: color 0.2s ease;
+}
+
+.main-nav a:hover {
+  color: #646cff;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5em;
+}
+
+.search-form .input-group {
+  margin-bottom: 0;
+}
+
+.search-form .input-field {
+  width: 200px;
+  background-color: #333;
+  border-color: #555;
+  color: white;
+}
+
+.search-form .input-field::placeholder {
+  color: #aaa;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.user-info span {
+  font-weight: 500;
+}
+
+.profile-link {
+  color: #646cff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 0.8em;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1em;
+  }
+
+  .header-left, .header-right {
+    width: 100%;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .main-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin-top: 0.5em;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+  .search-form .input-field {
+    flex-grow: 1;
+    width: auto;
+  }
+
+  .auth-buttons, .user-info {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

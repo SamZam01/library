@@ -1,0 +1,28 @@
+.app-form {
+  max-width: 400px;
+  margin: 2em auto;
+  padding: 2em;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background-color: #2a2a2a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  color: #eee;
+}
+
+.app-form h2 {
+  text-align: center;
+  margin-bottom: 1.5em;
+  color: #646cff;
+}
+
+.form-error-message {
+  color: #ff4d4d;
+  text-align: center;
+  margin-bottom: 1em;
+  font-weight: 500;
+}
+
+.app-form button {
+  width: 100%;
+  margin-top: 1.5em;
+}

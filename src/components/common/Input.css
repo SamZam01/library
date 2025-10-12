@@ -1,0 +1,38 @@
+.input-group {
+  margin-bottom: 1em;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+  color: var(--text-color); 
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.8em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box;
+  background-color: var(--background-color-light);
+  color: var(--text-color);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+}
+
+.input-error {
+  border-color: #ff4d4d;
+}
+
+.input-error-message {
+  color: #ff4d4d;
+  font-size: 0.85em;
+  margin-top: 0.5em;
+}

@@ -1,0 +1,38 @@
+.profile-page {
+  padding: 2em;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.profile-page h1 {
+  margin-bottom: 1.5em;
+  color: #646cff;
+}
+
+.profile-details {
+  background-color: #2a2a2a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 2em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: left;
+}
+
+.profile-details p {
+  font-size: 1.1em;
+  margin-bottom: 1em;
+  color: #eee;
+}
+
+.profile-details p span {
+  font-weight: normal;
+  color: #bbb;
+  margin-left: 0.5em;
+}
+
+.auth-required-message {
+  font-size: 1.1em;
+  color: #ccc;
+  padding: 2em;
+}

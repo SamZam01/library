@@ -1,0 +1,113 @@
+.loans-page {
+  padding: 2em;
+}
+
+.loans-page h1 {
+  text-align: center;
+  margin-bottom: 1.5em;
+  color: #646cff;
+}
+
+.active-loans-section, .returned-loans-section {
+  margin-bottom: 3em;
+}
+
+.active-loans-section h2, .returned-loans-section h2 {
+  text-align: center;
+  margin-bottom: 1.5em;
+  color: #ccc;
+  font-size: 1.8em;
+}
+
+.empty-list-message, .auth-required-message {
+  text-align: center;
+  font-size: 1.1em;
+  color: #ccc;
+  padding: 2em;
+}
+
+.loans-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.loan-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+  padding: 1em;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background-color: #2a2a2a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.loan-item.returned {
+  opacity: 0.8;
+  background-color: #222;
+}
+
+.loan-book-cover {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.loan-info {
+  flex-grow: 1;
+}
+
+.loan-info h3 {
+  margin: 0 0 0.5em 0;
+  font-size: 1.2em;
+  color: #eee;
+}
+
+.loan-info p {
+  margin: 0.3em 0;
+  font-size: 0.95em;
+  color: #bbb;
+}
+
+.loan-status {
+  font-weight: bold;
+  margin-top: 0.5em;
+}
+
+.status-active {
+  color: #646cff;
+}
+
+.status-returned {
+  color: #28a745; 
+}
+
+.status-overdue {
+  color: #dc3545;
+}
+
+.loan-item button {
+  flex-shrink: 0;
+}
+
+
+@media (max-width: 600px) {
+  .loan-item {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .loan-info {
+    width: 100%;
+  }
+
+  .loan-item button {
+    width: 80%;
+  }
+}

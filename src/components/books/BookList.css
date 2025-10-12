@@ -1,0 +1,13 @@
+.book-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5em;
+  padding: 1em 0;
+}
+
+.error-message, .no-results {
+  text-align: center;
+  color: #ff4d4d;
+  font-size: 1.1em;
+  padding: 2em;
+}
