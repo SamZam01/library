@@ -10,6 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["jest", "node"],
     "allowJs": true,
+    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": false
   },
   "include": [
