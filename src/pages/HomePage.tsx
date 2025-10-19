@@ -32,7 +32,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="page-container home-page">
       <section className="hero-section">
-        <h1>Bienvenido a la Biblioteca SPA</h1>
+        <h1>Bienvenido a Library</h1>
         <p>Explora un vasto catálogo de libros, gestiona tus préstamos y crea tu lista de deseos.</p>
         <Link to="/books">
           <Button variant="primary" size="large">Explorar Libros Ahora</Button>

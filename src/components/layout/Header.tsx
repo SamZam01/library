@@ -29,7 +29,7 @@ const Header: React.FC = () => {
     <header className="app-header">
       <div className="header-left">
         <Link to="/" className="app-logo">
-          Biblioteca SPA
+          Library
         </Link>
         <nav className="main-nav">
           <Link to="/books">Explorar Libros</Link>
