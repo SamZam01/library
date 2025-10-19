@@ -7,5 +7,7 @@ export interface Book {
   description?: string;
   categories?: string[];
   isbn?: string[];
-  availability?: 'available' | 'borrowed'; 
+  availability?: 'available' | 'borrowed';
+  subjects?: string[];
+  language?: string[];
 }

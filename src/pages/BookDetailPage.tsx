@@ -22,10 +22,10 @@ const BookDetailPage: React.FC = () => {
   const [wishlist, setWishlist] = useLocalStorage<Book[]>('lib_wishlist', []);
   const [loans, setLoans] = useLocalStorage<Loan[]>('lib_loans', []);
   const [showNotification, setShowNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     if (id) {
-      
       const fullBookId = `/works/${id}`;
       fetchBookDetails(fullBookId).then(fetchedBook => {
         if (fetchedBook) {
@@ -85,6 +85,7 @@ const BookDetailPage: React.FC = () => {
 
   const coverUrl = getCoverImageUrl(book.coverId, 'L');
 
+
   return (
     <div className="page-container book-detail-page">
       {showNotification && (
@@ -96,25 +97,49 @@ const BookDetailPage: React.FC = () => {
 
       <div className="book-detail-content">
         <div className="book-detail-cover">
-          <img src={coverUrl} alt={`Portada de ${book.title}`} />
+          <img 
+            src={imgError ? '/placeholder-book.svg' : coverUrl}
+            alt={`Portada de ${book.title}`}
+            onError={() => setImgError(true)}
+          />
         </div>
         <div className="book-detail-info">
           <h1>{book.title}</h1>
           <p className="book-detail-authors">
-            **Autor(es):** {book.authors?.join(', ') || 'Desconocido'}
+            Autor(es): {book.authors?.join(', ') || 'Desconocido'}
           </p>
           {book.firstPublishYear && (
             <p className="book-detail-year">
-              **Año de Publicación:** {book.firstPublishYear}
+              Año de Publicación: {book.firstPublishYear}
             </p>
           )}
+          
+          {book.language && book.language.length > 0 && (
+            <p className="book-detail-language">
+              <strong>Idioma:</strong> {book.language.join(', ')}
+            </p>
+          )}
+
+          {book.subjects && book.subjects.length > 0 && (
+            <div className="book-detail-subjects">
+              <h3>Categorías:</h3>
+              <div className="subjects-tags">
+                {book.subjects.slice(0, 10).map((subject, index) => (
+                  <span key={index} className="subject-tag">{subject}</span>
+                ))}
+                {book.subjects.length > 10 && (
+                  <span className="subject-tag">+{book.subjects.length - 10} más</span>
+                )}
+              </div>
+            </div>
+          )}
+
           {book.description && (
             <div className="book-detail-description">
               <h3>Descripción:</h3>
               <p>{book.description}</p>
             </div>
           )}
-          {/* Aquí se podrían añadir más detalles como categorías, ISBN, etc. */}
 
           <div className="book-detail-actions">
             <Button onClick={handleAddToWishlist} variant="secondary">

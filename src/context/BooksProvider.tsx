@@ -29,8 +29,8 @@ export const BooksProvider: React.FC<BooksProviderProps> = ({ children }) => {
       setIsLoading(true);
       setError(null);
       try {
-        const fetchedBooks = await searchBooks(query, filters, limit, offset);
-        setBooks(fetchedBooks);
+        const result = await searchBooks(query, filters, limit, offset);
+        setBooks(result.books);
       } catch (err) {
         setError('No se pudieron cargar los libros. Inténtalo de nuevo.');
         console.error('Error in BooksContext search:', err);

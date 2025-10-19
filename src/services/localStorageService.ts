@@ -1,7 +1,3 @@
-/**
- * Servicio centralizado para interactuar con LocalStorage.
- * Proporciona una capa de abstracción y manejo de errores.
- */
 
 /**
  * Obtiene un elemento de LocalStorage.

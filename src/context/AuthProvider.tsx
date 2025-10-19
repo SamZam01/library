@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { User } from '../types/user';
-import { loginUser, registerUser, getCurrentUser, logoutUser } from '../services/authService';
+import { loginUser, registerUser, getCurrentUser, logoutUser, changePassword as changePasswordService } from '../services/authService';
 import { AuthContext } from './AuthContext';
 
 interface AuthProviderProps {
@@ -30,7 +30,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsAuthenticated(true);
       setIsLoading(false);
       return true;
-      console.log('Token generado y almacenado en login');
     }
     setIsLoading(false);
     return false;
@@ -43,6 +42,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return success;
   };
 
+  const changePassword = (currentPassword: string, newPassword: string) => {
+    return changePasswordService(currentPassword, newPassword);
+  };
+
   const logout = () => {
     logoutUser();
     setCurrentUser(null);
@@ -50,7 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, currentUser, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, currentUser, isLoading, login, register, logout, changePassword }}>
       {children}
     </AuthContext.Provider>
   );

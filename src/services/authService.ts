@@ -81,3 +81,46 @@ export const logoutUser = (): void => {
   localStorage.removeItem(CURRENT_USER_KEY);
   removeAuthToken();
 };
+
+/**
+ * Cambia la contraseña del usuario actual
+ */
+export const changePassword = (
+  currentPassword: string,
+  newPassword: string
+): { success: boolean; message: string } => {
+  const currentUser = getCurrentUser();
+  
+  if (!currentUser) {
+    return { success: false, message: 'No hay sesión activa' };
+  }
+
+  const usersData = localStorage.getItem('lib_users');
+  if (!usersData) {
+    return { success: false, message: 'Error al acceder a los datos' };
+  }
+
+  const users: User[] = JSON.parse(usersData);
+  const userIndex = users.findIndex(u => u.id === currentUser.id);
+
+  if (userIndex === -1) {
+    return { success: false, message: 'Usuario no encontrado' };
+  }
+
+  if (users[userIndex].password !== currentPassword) {
+    return { success: false, message: 'Contraseña actual incorrecta' };
+  }
+
+  if (newPassword.length < 6) {
+    return { success: false, message: 'La nueva contraseña debe tener al menos 6 caracteres' };
+  }
+
+  users[userIndex].password = newPassword;
+  localStorage.setItem('lib_users', JSON.stringify(users));
+
+  const updatedUser = { ...users[userIndex] };
+  delete updatedUser.password;
+  localStorage.setItem('lib_currentUser', JSON.stringify(updatedUser));
+
+  return { success: true, message: 'Contraseña actualizada correctamente' };
+};

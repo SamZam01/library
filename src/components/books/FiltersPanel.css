@@ -44,6 +44,18 @@
   gap: 1em;
   justify-content: center;
 }
+.filter-input-group {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+}
+
+.filter-input-group label {
+  margin-bottom: 0.5em;
+  color: #eee;
+  font-weight: 500;
+  min-height: 1.5em;
+}
 
 @media (max-width: 768px) {
   .filters-grid {

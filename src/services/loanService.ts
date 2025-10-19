@@ -1,6 +1,6 @@
 import type { Loan } from '../types/loan';
 import { getItem, setItem } from './localStorageService';
-import { getAuthToken } from './authTokenService'; // ✅ Agregado
+import { getAuthToken } from './authTokenService'; 
 
 const LOANS_KEY = 'lib_loans';
 
@@ -27,17 +27,17 @@ const saveAllLoans = (loans: Loan[]): void => {
  * @returns El nuevo objeto Loan creado, o null si falla.
  */
 export const addLoan = (bookId: string, userId: string): Loan | null => {
-  // ✅ Verificación de token antes de continuar (simulando auth)
+  
   const token = getAuthToken();
   if (!token) {
-    console.error('Token requerido para préstamo'); // Simulación de error de auth
+    console.error('Token requerido para préstamo'); 
     return null;
   }
 
   const loans = getAllLoans();
   const now = new Date();
   const dueDate = new Date();
-  dueDate.setDate(now.getDate() + 14); // Vence en 14 días
+  dueDate.setDate(now.getDate() + 14); 
 
   const newLoan: Loan = {
     id: `loan-${Date.now()}`,

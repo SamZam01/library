@@ -32,8 +32,8 @@ function App() {
               <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
               <Route path="/loans" element={<ProtectedRoute><LoansPage /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-              {/* Ruta para manejar categorías (ej. /categories/fiction) */}
-              {/* <Route path="/categories/:categoryName" element={<BookListPage />} /> */}
+              {}
+              {}
               <Route path="*" element={<NotFoundPage />} /> {/* Ruta 404 */}
             </Routes>
           </main>

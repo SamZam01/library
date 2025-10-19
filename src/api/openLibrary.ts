@@ -8,6 +8,8 @@ interface OpenLibraryDoc {
   author_name?: string[];
   cover_i?: number;
   first_publish_year?: number;
+  subject?: string[];
+  language?: string[]; 
 }
 
 interface SearchResponse {
@@ -23,6 +25,10 @@ interface OpenLibraryAuthorRef {
   };
 }
 
+interface OpenLibraryEdition {
+  languages?: Array<{ key: string }>;
+}
+
 interface OpenLibraryWork {
   key: string;
   title: string;
@@ -31,14 +37,24 @@ interface OpenLibraryWork {
   covers?: number[];
   first_publish_date?: string;
   excerpts?: { text: string }[];
+  subjects?: string[];
+  subject_places?: string[];
+  subject_times?: string[];
+  subject_people?: string[];
+  languages?: Array<{ key: string }>;
+}
+
+interface OpenLibraryAuthor {
+  name?: string;
 }
 
 /**
  * Busca libros en Open Library por query.
  * @param query Término de búsqueda (título, autor, etc.).
+ * @param filters Filtros adicionales para la búsqueda.
  * @param limit Número de resultados a devolver.
  * @param offset Desplazamiento para paginación.
- * @returns Promesa que resuelve a una lista de libros.
+ * @returns Promesa que resuelve a una lista de libros y el total de resultados.
  */
 export const searchBooks = async (
   query: string,
@@ -52,10 +68,9 @@ export const searchBooks = async (
   } = {}, 
   limit: number = 10,
   offset: number = 0
-): Promise<Book[]> => {
+): Promise<{ books: Book[]; total: number }> => {
   try {
     let url = `${BASE_URL}/search.json?q=${encodeURIComponent(query)}`;
-    
     
     if (filters.subject) url += `&subject=${encodeURIComponent(filters.subject)}`;
     if (filters.author) url += `&author=${encodeURIComponent(filters.author)}`;
@@ -71,18 +86,97 @@ export const searchBooks = async (
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data: SearchResponse = await response.json();
-    return data.docs.map((doc: OpenLibraryDoc) => ({
+    
+    const books = data.docs.map((doc: OpenLibraryDoc) => ({
       id: doc.key,
       title: doc.title,
       authors: doc.author_name || [],
       coverId: doc.cover_i,
       firstPublishYear: doc.first_publish_year,
+      subjects: doc.subject,
+      language: doc.language,
     }));
+
+    return {
+      books,
+      total: data.numFound
+    };
   } catch (error) {
     console.error('Error searching books:', error);
-    return [];
+    return { books: [], total: 0 };
   }
 };
+
+/**
+ * Obtiene el nombre de un autor por su key.
+ * @param key El key del autor (ej. "/authors/OL3175986A").
+ * @returns Promesa que resuelve al nombre del autor o un fallback.
+ */
+const fetchAuthorName = async (key: string): Promise<string> => {
+  try {
+    const response = await fetch(`${BASE_URL}${key}.json`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data: OpenLibraryAuthor = await response.json();
+    return data.name || 'Autor Desconocido';
+  } catch (error) {
+    console.error(`Error fetching author name for ${key}:`, error);
+    return 'Autor Desconocido';
+  }
+};
+
+/**
+ * Mapea códigos de idioma a nombres legibles
+ */
+const languageNames: Record<string, string> = {
+  eng: 'Inglés',
+  spa: 'Español',
+  fre: 'Francés',
+  ger: 'Alemán',
+  ita: 'Italiano',
+  por: 'Portugués',
+  rus: 'Ruso',
+  jpn: 'Japonés',
+  chi: 'Chino',
+  ara: 'Árabe',
+};
+
+const getLanguageName = (code: string): string => {
+  const cleanCode = code.replace('/languages/', '');
+  return languageNames[cleanCode] || cleanCode.toUpperCase();
+};
+
+/**
+ * Obtiene idiomas desde las ediciones del libro
+ */
+const fetchBookLanguages = async (workId: string): Promise<string[] | undefined> => {
+  try {
+    const editionsUrl = `${BASE_URL}${workId}/editions.json?limit=10`;
+    const response = await fetch(editionsUrl);
+    if (!response.ok) return undefined;
+    
+    const data = await response.json();
+    const languageCodes = new Set<string>();
+    
+    if (data.entries && Array.isArray(data.entries)) {
+      data.entries.forEach((edition: OpenLibraryEdition) => {
+        if (edition.languages) {
+          edition.languages.forEach(lang => {
+            languageCodes.add(getLanguageName(lang.key));
+          });
+        }
+      });
+    }
+    
+    return languageCodes.size > 0 ? Array.from(languageCodes) : undefined;
+  } catch (error) {
+    console.error('Error fetching book languages:', error);
+    return undefined;
+  }
+};
+
+
 
 /**
  * Obtiene los detalles de un libro por su ID (work key).
@@ -104,19 +198,41 @@ export const getBookDetails = async (bookId: string): Promise<Book | null> => {
       description = data.excerpts[0].text;
     }
 
+    // Obtener nombres de autores con fetches adicionales
+    const authors = data.authors
+      ? await Promise.all(
+          data.authors.map(async (a: OpenLibraryAuthorRef) => {
+            if (a.author.name) {
+              return a.author.name;
+            }
+            return await fetchAuthorName(a.author.key);
+          })
+        )
+      : [];
+
+    const yearMatch = data.first_publish_date ? data.first_publish_date.match(/\b(\d{4})\b/) : null;
+    const firstPublishYear = yearMatch ? parseInt(yearMatch[1], 10) : undefined;
+
+    const subjects = [
+      ...(data.subjects || []),
+      ...(data.subject_places || []),
+      ...(data.subject_times || []),
+      ...(data.subject_people || []),
+    ];
+
+    const languages = data.languages 
+      ? data.languages.map(lang => getLanguageName(lang.key))
+      : await fetchBookLanguages(data.key);
+
     return {
       id: data.key,
       title: data.title,
-      authors: data.authors
-        ? data.authors.map((a: OpenLibraryAuthorRef) =>
-            a.author.key ? a.author.key.split('/').pop()! : a.author.name || ''
-          )
-        : [],
+      authors,
       coverId: data.covers && data.covers.length > 0 ? data.covers[0] : undefined,
-      firstPublishYear: data.first_publish_date
-        ? parseInt(data.first_publish_date.split(' ')[2])
-        : undefined,
+      firstPublishYear,
       description,
+      subjects: subjects.length > 0 ? subjects : undefined,
+      language: languages,
     };
   } catch (error) {
     console.error(`Error fetching book details for ${bookId}:`, error);
@@ -135,7 +251,7 @@ export const getCoverImageUrl = (
   size: 'S' | 'M' | 'L' = 'M'
 ): string => {
   if (!coverId) {
-    return '/placeholder-book.png'; 
+    return '/libro.PNG'; 
   }
   return `https://covers.openlibrary.org/b/id/${coverId}-${size}.jpg`;
 };

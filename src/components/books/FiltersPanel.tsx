@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Input from '../common/Input';
 import Button from '../common/Button';
+import LanguageSelect from '../common/LanguageSelect';
 import './FiltersPanel.css';
 
 interface Filters {
@@ -80,13 +81,14 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({ onFilterChange, initialFilt
           onChange={handleInputChange}
           placeholder="Ej. fantasy"
         />
-        <Input
-          label="Idioma"
-          name="language"
-          value={filters.language || ''}
-          onChange={handleInputChange}
-          placeholder="Ej. eng (inglés)"
-        />
+        <div className="filter-input-group">
+          <label htmlFor="language">Idioma</label>
+          <LanguageSelect
+            name="language"
+            value={filters.language || ''}
+            onChange={handleInputChange}
+          />
+        </div>
         <Input
           label="Año de Publicación"
           name="firstPublishYear"
