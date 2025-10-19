@@ -35,7 +35,7 @@
   font-size: 2.2em;
   margin-top: 0;
   margin-bottom: 0.5em;
-  color: #646cff;
+  color: #d121f5;
 }
 
 .book-detail-authors, .book-detail-year {
@@ -69,7 +69,7 @@
 }
 
 .book-detail-language strong {
-  color: #646cff;
+  color: #d121f5;
 }
 
 @media (max-width: 768px) {
